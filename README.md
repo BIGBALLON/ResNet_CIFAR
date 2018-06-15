@@ -6,6 +6,8 @@
 We used a new learning rate scheduler called HTD.  
 You can see the toy demo code [here](https://github.com/BIGBALLON/cifar-10-cnn/tree/master/htd) or our papar in [arXiv](https://arxiv.org/abs/1806.01593).
 
+## Original Repository
+
 This repository is about some experiments of learning rate with CIFAR-10 & CIFAR-100.  
 
 The original paper start with a learning rate of **0.1**, divide it by **10** at 32k(**81 epoch**) and 48k(**122 epoch**) iterations, and
