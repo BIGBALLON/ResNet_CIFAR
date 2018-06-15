@@ -43,16 +43,6 @@ epochs             = args.epochs
 iterations         = 50000 // batch_size + 1
 weight_decay       = 1e-4
 
-def color_preprocessing(x_train,x_test):
-    x_train = x_train.astype('float32')
-    x_test = x_test.astype('float32')
-    mean = [125.307, 122.95, 113.865]
-    std  = [62.9932, 62.0887, 66.7048]
-    for i in range(3):
-        x_train[:,:,:,i] = (x_train[:,:,:,i] - mean[i]) / std[i]
-        x_test[:,:,:,i] = (x_test[:,:,:,i] - mean[i]) / std[i]
-    return x_train, x_test
-
 # learning rate scheduler 1
 def scheduler_200_81_122(epoch):
     if epoch < 81:
@@ -142,21 +132,30 @@ if __name__ == '__main__':
     print("DATASET: {:}".format(args.dataset))
     print("LEARNING RATE SCHEDULER: {:d}".format(args.lr_scheduler))
 
-    print("== LOADING DATA... ==")
-    # load data
-    global num_classes
+    print("\n== LOADING DATA... ==")
+    
+    # load data cifar-10 or cifar-100
     if args.dataset == "cifar100":
         num_classes = 100
+        mean = [129.3, 124.1, 112.4]
+        std  = [68.2, 65.4, 70.4]
         (x_train, y_train), (x_test, y_test) = cifar100.load_data()
     else:
+        num_classes = 10
+        mean = [125.3, 123.0, 113.9]
+        std  = [63.0, 62.1, 66.7]
         (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+
     y_train = keras.utils.to_categorical(y_train, num_classes)
     y_test = keras.utils.to_categorical(y_test, num_classes)
-    
 
-    print("== DONE! ==\n== COLOR PREPROCESSING... ==")
+    print("\n== DONE! ==\n\n== COLOR PREPROCESSING... ==")
     # color preprocessing
-    x_train, x_test = color_preprocessing(x_train, x_test)
+    x_train = x_train.astype('float32')
+    x_test = x_test.astype('float32')
+    for i in range(3):
+        x_train[:,:,:,i] = (x_train[:,:,:,i] - mean[i]) / std[i]
+        x_test[:,:,:,i] = (x_test[:,:,:,i] - mean[i]) / std[i]
 
     print("== DONE! ==\n== BUILD MODEL... ==")
     # build network
