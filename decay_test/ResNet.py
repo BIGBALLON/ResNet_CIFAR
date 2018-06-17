@@ -76,9 +76,9 @@ def scheduler_200_150_180(epoch):
     return 0.001
 
 def scheduler_400_250_325(epoch):
-    if epoch < 150:
+    if epoch < 250:
         return 0.1
-    if epoch < 180:
+    if epoch < 325:
         return 0.01
     return 0.001
 
