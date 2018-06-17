@@ -75,6 +75,13 @@ def scheduler_200_150_180(epoch):
         return 0.01
     return 0.001
 
+def scheduler_400_250_325(epoch):
+    if epoch < 150:
+        return 0.1
+    if epoch < 180:
+        return 0.01
+    return 0.001
+
 class AccHistory(keras.callbacks.Callback):
     def on_train_begin(self, logs={}):
         self.val_acc = {'batch':[], 'epoch':[]}
@@ -208,6 +215,9 @@ if __name__ == '__main__':
         lrs = LearningRateScheduler(scheduler_200_125_170)
     elif scheduler == 4:
         lrs = LearningRateScheduler(scheduler_200_150_180)
+    elif scheduler == 5:
+        lrs = LearningRateScheduler(scheduler_400_250_325)
+
     tb   = TensorBoard(log_dir='./resnet_{:d}_{}_{}_{}/'.format(layers,args.dataset,scheduler,args.count), histogram_freq=0)
     ckpt = ModelCheckpoint('./resnet_{:d}_{}_{}_{}/'.format(layers,args.dataset,scheduler,args.count)+'{epoch:02d}_{val_acc:.4f}.h5', 
                             monitor='val_loss', verbose=0, save_best_only=False, mode='auto', period=1)
